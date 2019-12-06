@@ -1,0 +1,146 @@
+@import "a"; 
+@import url('./b.css');
+@import "variable";
+$width:10px;
+body{
+	/*这是注释*/
+	background:/*这是注释*/$color-background-d;
+	//静默注释
+	color:white;
+}
+// 扩展点击区域
+@mixin extend-click{
+  position: relative;
+  &:before{
+  	content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+  }
+    
+}
+// 不换行
+@mixin no-wrap{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+// 背景图片
+@mixin bg-image($url){
+  background-image: url($url + "@1x.png");
+  @media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2){
+    background-image: url($url + "@2x.png");
+  }
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
+    background-image: url($url + "@3x.png");
+  }
+}
+#cc{
+	width:200px;
+	font-size:12px;
+	@include no-wrap;
+	@include bg-image('../img/logo');
+}
+.only{
+	display:block;
+	width:40px;
+	height:40px;
+	font-size:12px;
+	@include extend-click;
+
+}	
+h1{
+	color:yello;
+}
+div.one-h1{
+	color:blue;
+}
+ul{
+	background:red;
+	li{
+		background:pink;
+		div{
+			background:white;
+			h1.one-h1{
+				color:red;
+			}
+			h1.two-h2{
+				color:blue;
+			}
+			h1.three-h1{
+				color:yellow;
+			}
+		}
+	}
+}
+
+article{
+	~article{
+		border-top:1px dashed #ccc;
+	}
+	>footer{
+		background:#eee;
+	}
+	dl>{
+		dt{
+			color:#333;
+		}
+		dd{
+			color:#555;
+		}
+	}
+	nav+&{margin-top:0;}
+}
+@mixin border($radius,$w:30px){
+	border-radius:$radius;
+	-webkit-border-radius:$radius;
+	-o-border-radius:$radius;
+	-ms-border-radius:$radius;
+	width:$w;
+}
+nav{
+	$width:4px !default;
+	border:{
+		style:solid;
+		width:$width;
+		color:#ccc;
+	}
+	@include border($radius:2px);
+}
+
+div{
+	border-width:10px;
+	border-style:solid;
+	border-color:$color-theme;
+	@include border(5px,40px);
+}
+
+//判断语句
+#dd{
+	@if 1+1==2 {background:red;}
+
+}
+
+//循环语句
+@for $i from 1 through 4{
+	.item-#{$i}{
+		width:20px*$i;
+	}
+}
+
+@for $i from 1 to 4{
+	.cc-#{$i}{
+		width:20px*$i;
+	}
+}
+
+//函数
+@function fn($j){
+	@return $j*20px+7px-9px;
+}
+
+.ee{
+	width:fn(2);
+}
